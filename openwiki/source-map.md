@@ -3,9 +3,6 @@ type: "Reference"
 title: "Source Map: Repository File Organization"
 description: "Quick reference for locating code by topic, mapping LangChain concepts to their implementation paths across the monorepo including core abstractions, agents, middleware, partners, and configuration files."
 tags: [reference, file-organization, monorepo, codebase-map, pathfinding]
-verified:
-  - by: openwiki/0.5.0
-    at: 2026-09-03T15:18:34.589Z
 sources:
   - id: openwiki-source-4d1645cb6317345817452838
     resource: repo://.pre-commit-config.yaml
@@ -47,7 +44,10 @@ sources:
     resource: repo://libs/partners/openai/langchain_openai/chat_models/base.py
   - id: openwiki-source-bd29e79613d5f366a00068f5
     resource: repo://libs/standard-tests/langchain_tests/base.py
-generated: { by: "openwiki/0.5.0", at: "2026-09-03T15:18:34.589Z" }
+generated: { by: "openwiki/0.5.0", at: "2026-09-07T08:30:39.263Z" }
+verified:
+  - by: openwiki/0.5.0
+    at: 2026-09-07T08:30:39.263Z
 ---
 
 ## Overview
@@ -89,7 +89,7 @@ This page provides a quick reference for locating code by topic in the LangChain
 
 ```
 /libs/
-├── core/                           # langchain-core: Base abstractions (v1.6.1)
+├── core/                           # langchain-core: Base abstractions (v1.6.2)
 │   ├── langchain_core/
 │   │   ├── language_models/        # BaseChatModel and language model abstractions
 │   │   ├── messages/               # Message types and content blocks
@@ -267,7 +267,7 @@ The `BaseTool` in `repo://libs/core/langchain_core/tools/base.py` provides:
 ```
 User Applications
   ├─→ langchain (v1.4.0)
-  │    ├─→ langchain-core (v1.6.1)
+  │    ├─→ langchain-core (v1.6.2)
   │    └─→ LangGraph (state machines)
   │
   ├─→ langchain-core (direct use)
@@ -277,3 +277,14 @@ User Applications
 ```
 
 **Versioning**: Core is released independently with strict semantic versioning. LangChain and partners pin core versions. Partner packages are released independently per provider.
+
+## Repository Evidence
+
+The repository includes comprehensive test coverage organized into unit and integration test suites for each package layer:
+
+- **Core abstractions** (`repo://libs/core/tests/`) include unit tests for runnables, messages, prompts, tools, and callbacks
+- **Orchestration and agents** (`repo://libs/langchain_v1/tests/`) include unit and integration tests for agent execution and provider fallback
+- **Partners** (`repo://libs/partners/*/tests/`) include provider-specific unit and integration tests
+- **Standard test contracts** (`repo://libs/standard-tests/`) ensure conformance across the ecosystem
+
+All tests follow a consistent pattern of using `unit_tests/` and `integration_tests/` directories within each package.

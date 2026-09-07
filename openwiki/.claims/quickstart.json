@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "pageVersion": "sha256:7dc36350c57797f4e4cb42c4ca2523c8a6fda499d2176362da99865392c8721b",
+  "pageVersion": "sha256:9ded210067f94463ae48ce158f97f9fbaa9776786d3cd7d2e11354930a817004",
   "claims": [
     {
       "id": "claim_7425c73f5e4c4667b8babba66c3663a0",
@@ -84,15 +84,19 @@
     },
     {
       "id": "claim_e9cccec63975419089bd76979ebd1ba8",
-      "statement": "LangChain monorepo uses uv for fast, deterministic dependency resolution; developers install dependencies via 'uv sync --all-groups' to get test, lint, type, and dev tools",
+      "statement": "LangChain monorepo uses uv for fast, deterministic dependency resolution; developers install dependencies via 'uv sync --all-groups' to get test, lint, type, and dev tools. langchain-core is version 1.6.2 and langchain (langchain_v1) is version 1.4.0.",
       "evidence": [
         {
           "resource": "repo://libs/Makefile",
           "version": "repo-file-v1:sha256:b703a85cdfdb60e98c41ec8261d9b78f0e7137105ee9da36b8cb919b2d35858b"
         },
         {
-          "resource": "repo://libs/core/pyproject.toml",
-          "version": "repo-file-v1:sha256:325931f1a0825e70a5f7c0228e9a98e3bd6e2395ea23db6d7a0dffce70087408"
+          "resource": "repo://libs/core/pyproject.toml#L24-L24",
+          "version": "repo-lines-v1:sha256:aedcca5df1c476f4736d0f7d783cfab756063205d0b98960d97ce7c40356c7e8:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiYWVkY2NhNWRmMWM0NzZmNDczNmQwZjdkNzgzY2ZhYjc1NjA2MzIwNWQwYjk4OTYwZDk3Y2U3YzQwMzU2YzdlOCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiYWVkY2NhNWRmMWM0NzZmNDczNmQwZjdkNzgzY2ZhYjc1NjA2MzIwNWQwYjk4OTYwZDk3Y2U3YzQwMzU2YzdlOCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmRmYWFiMzNiMmUzYTUwMTM3NmZlODIxNDNkNzBmNmVkYjMyNWI4YWMzYWI5MDUwYTg0OTgwN2ZmM2FhZGI3NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiOGEyM2RmNzFkODljMGE5NmUzNWFhZjk1ZTdjZTllYTczYTRiN2FlZjQyNDZjN2Q3YzAzZjhlM2EwMTJiZjliNSJ9"
+        },
+        {
+          "resource": "repo://libs/langchain_v1/pyproject.toml#L24-L24",
+          "version": "repo-lines-v1:sha256:d2471c35804cb8d0373c88651125a687cc4fd535a936d204cd2d1dfb1f34482d:eyJzZWxlY3RlZExpbmVDb3VudCI6MSwiZmlyc3RTZWxlY3RlZExpbmVIYXNoIjoiZDI0NzFjMzU4MDRjYjhkMDM3M2M4ODY1MTEyNWE2ODdjYzRmZDUzNWE5MzZkMjA0Y2QyZDFkZmIxZjM0NDgyZCIsImxhc3RTZWxlY3RlZExpbmVIYXNoIjoiZDI0NzFjMzU4MDRjYjhkMDM3M2M4ODY1MTEyNWE2ODdjYzRmZDUzNWE5MzZkMjA0Y2QyZDFkZmIxZjM0NDgyZCIsInByZWNlZGluZ0NvbnRleHRMaW5lQ291bnQiOjMsInByZWNlZGluZ0NvbnRleHRIYXNoIjoiNmRmYWFiMzNiMmUzYTUwMTM3NmZlODIxNDNkNzBmNmVkYjMyNWI4YWMzYWI5MDUwYTg0OTgwN2ZmM2FhZGI3NSIsImZvbGxvd2luZ0NvbnRleHRMaW5lQ291bnQiOjMsImZvbGxvd2luZ0NvbnRleHRIYXNoIjoiNTc2YjNjZThiMzc5ODFjOTEzZmI4N2MyMDUwN2MxYzAzMmVmYmRmNzRhMjA5YzdlYTkyYmZjNzZhNTYxODk3MyJ9"
         }
       ]
     },
@@ -183,6 +187,6 @@
   ],
   "verification": {
     "by": "openwiki/0.5.0",
-    "at": "2026-09-03T15:18:34.589Z"
+    "at": "2026-09-07T08:30:39.263Z"
   }
 }

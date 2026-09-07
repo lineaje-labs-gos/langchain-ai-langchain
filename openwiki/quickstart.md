@@ -5,7 +5,7 @@ description: "Entry point for engineers: orient to the monorepo structure, run f
 tags: [quickstart, getting-started, monorepo, setup, development, first-steps, cli-reference]
 verified:
   - by: openwiki/0.5.0
-    at: 2026-09-03T15:18:34.589Z
+    at: 2026-09-07T08:30:39.263Z
 sources:
   - id: openwiki-source-4d1645cb6317345817452838
     resource: repo://.pre-commit-config.yaml
@@ -37,13 +37,15 @@ sources:
     resource: repo://libs/langchain_v1/langchain/agents/middleware/__init__.py
   - id: openwiki-source-b09b1477098d69af6abaa5b4
     resource: repo://libs/langchain_v1/langchain/chat_models/__init__.py
+  - id: openwiki-source-ba4876d385d4d18ed4fa0342
+    resource: repo://libs/langchain_v1/pyproject.toml
   - id: openwiki-source-49fbcc45434b619b68220bf9
     resource: repo://libs/Makefile
   - id: openwiki-source-1e66a9da38565f8901e651f4
     resource: repo://libs/partners/openai/langchain_openai/__init__.py
   - id: openwiki-source-48ce5ee900993294d349b4e8
     resource: repo://libs/standard-tests/langchain_tests/__init__.py
-generated: { by: "openwiki/0.5.0", at: "2026-09-03T15:18:34.589Z" }
+generated: { by: "openwiki/0.5.0", at: "2026-09-07T08:30:39.263Z" }
 ---
 
 ## Welcome to LangChain Development
@@ -212,6 +214,7 @@ Use the table below to route to detailed documentation:
 | **Work with prompts** | [Prompts](/openwiki/prompts.md) | Templates, few-shot, variables, image handling |
 | **Understand message types** | [Messages](/openwiki/messages.md) | AIMessage, ToolMessage, content blocks, provider conversion |
 | **Use Model Context Protocol** | [MCP Integration](/openwiki/mcp-integration.md) | MCP servers, tool adapters, elicitation |
+| **Integrate OpenAI models** | [OpenAI Provider](/openwiki/openai-provider.md) | ChatOpenAI, tool binding, vision, structured output, token counting |
 | **Reference all file paths** | [Source Map](/openwiki/source-map.md) | Concept-to-path lookup table, directory structure |
 | **Check CI/CD workflows** | [CI/CD Workflows](/openwiki/ci-workflows.md) | GitHub Actions, testing, linting, release process |
 | **Development command reference** | [Dev Commands](/openwiki/dev-commands.md) | Detailed make targets, uv syntax, env setup |
@@ -233,7 +236,7 @@ Use the table below to route to detailed documentation:
 
 ### Inside `/libs/`
 
-**core/** — Base abstractions (langchain-core package)
+**core/** — Base abstractions (langchain-core package, v1.6.2)
 ```
 core/
 ├── langchain_core/
@@ -250,7 +253,7 @@ core/
 └── pyproject.toml        # Package deps and metadata
 ```
 
-**langchain_v1/** — Agent orchestration (langchain package)
+**langchain_v1/** — Agent orchestration (langchain package, v1.4.0)
 ```
 langchain_v1/
 ├── langchain/

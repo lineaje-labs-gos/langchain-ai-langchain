@@ -1,10 +1,11 @@
 ---
 type: "Reference"
-title: "> Entering new SequentialChain chain..."
-openwiki_generated: true
+title: "Callback System and Event Hooks"
+description: "Comprehensive guide to LangChain's callback system for observing and intercepting LLM and agent execution events, including callback managers, handlers, and integration with LangSmith for monitoring and tracing."
+tags: ["callbacks", "observability", "tracing", "event-dispatch", "handlers"]
 verified:
   - by: openwiki/0.5.0
-    at: 2026-09-03T15:18:34.589Z
+    at: 2026-09-07T08:30:39.263Z
 sources:
   - id: openwiki-source-c9313cf42f0120d86b20245f
     resource: repo://libs/core/langchain_core/callbacks/base.py
@@ -22,9 +23,8 @@ sources:
     resource: repo://libs/core/langchain_core/runnables/config.py
   - id: openwiki-source-bfd8b1aa6ad00852a2e99762
     resource: repo://libs/core/langchain_core/tracers/context.py
-generated: { by: "openwiki/0.5.0", at: "2026-09-03T15:18:34.589Z" }
+generated: { by: "openwiki/0.5.0", at: "2026-09-07T08:30:39.263Z" }
 ---
-
 
 ## Overview
 
@@ -110,7 +110,7 @@ Methods override:
 
 **Location**: `repo://libs/core/langchain_core/callbacks/file.py`
 
-Writes callback events to a file with optional coloring. Supports both context manager (recommended) and direct instantiation patterns.
+Writes callback events to a file with optional coloring. The handler supports both context manager (recommended) and direct instantiation patterns. When used as a context manager, the file is automatically managed and closed. When instantiated directly (deprecated), a deprecation warning is issued on first use, and explicit `close()` calls or relying on `__del__` cleanup is necessary.
 
 ```python
 from langchain_core.callbacks.file import FileCallbackHandler
@@ -119,7 +119,7 @@ from langchain_core.callbacks.file import FileCallbackHandler
 with FileCallbackHandler("output.txt") as handler:
     chain.invoke(input, config={"callbacks": [handler]})
 
-# Direct instantiation (deprecated)
+# Direct instantiation (deprecated - issues warning on first write)
 handler = FileCallbackHandler("output.txt")
 try:
     chain.invoke(input, config={"callbacks": [handler]})
@@ -127,7 +127,7 @@ finally:
     handler.close()
 ```
 
-The handler opens a file in append mode by default and writes formatted output for chains, agents, and tools.
+The handler opens a file in append mode by default and writes formatted output for chains, agents, and tools. When not used as a context manager, a deprecation warning is issued on the first callback event (configurable via the global `_GLOBAL_DEPRECATION_WARNED` flag to issue only once per process).
 
 ### StreamingStdOutCallbackHandler
 
@@ -447,7 +447,7 @@ The manager tracks completion state and calls parent's `on_chain_end` or `on_cha
 
 ## Best Practices
 
-1. **Use context managers for file handlers**: FileCallbackHandler should be used with `with` statement to ensure proper cleanup.
+1. **Use context managers for file handlers**: FileCallbackHandler should be used with `with` statement to ensure proper cleanup and avoid deprecation warnings.
 
 2. **Register global handlers via inheritable_callbacks**: Use `CallbackManager.configure(inheritable_callbacks=[...])` for handlers that should apply everywhere.
 

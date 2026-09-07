@@ -5,7 +5,7 @@ description: "High-level decomposition of the LangChain framework into three lay
 tags: [architecture, core, langchain, partners, orchestration, runnable, abstractions, layered-architecture]
 verified:
   - by: openwiki/0.5.0
-    at: 2026-09-03T15:18:34.589Z
+    at: 2026-09-07T08:30:39.263Z
 sources:
   - id: openwiki-source-c52037e7b642f7ac5a7642a8
     resource: repo://libs/core/langchain_core/language_models/chat_models.py
@@ -37,7 +37,7 @@ sources:
     resource: repo://libs/partners/README.md
   - id: openwiki-source-7da6afe7fe64c6589cf1fed0
     resource: repo://libs/README.md
-generated: { by: "openwiki/0.5.0", at: "2026-09-03T15:18:34.589Z" }
+generated: { by: "openwiki/0.5.0", at: "2026-09-07T08:30:39.263Z" }
 ---
 
 ## Overview
@@ -54,13 +54,12 @@ This structure enables model interoperability, stable versioning, and independen
 
 ## Dependency Flow
 
-<!-- openwiki: mermaid parse failed and this diagram was converted to a text fence so it does not break rendering. Fix the diagram source and restore the mermaid fence. Parser error: Heuristic: an unescaped angle bracket inside a label breaks rendering; rephrase the label. -->
-```text
+```mermaid
 graph TB
     User["User Applications"]
     
     User -->|imports from| LangChain["langchain<br/>(Orchestration & Agents)<br/>v1.4.0"]
-    User -->|may use directly| Core["langchain-core<br/>(Base Abstractions)<br/>v1.6.1"]
+    User -->|may use directly| Core["langchain-core<br/>(Base Abstractions)<br/>v1.6.2"]
     
     LangChain -->|depends on| Core
     LangChain -->|depends on| LangGraph["LangGraph<br/>(State Graph Engine)"]
@@ -155,8 +154,7 @@ Users typically import from `langchain` (the actively maintained package) to acc
 
 The `init_chat_model()` function provides the primary user-facing entry point for chat models:
 
-<!-- openwiki: mermaid parse failed and this diagram was converted to a text fence so it does not break rendering. Fix the diagram source and restore the mermaid fence. Parser error: Heuristic: an unescaped angle bracket inside a label breaks rendering; rephrase the label. -->
-```text
+```mermaid
 sequenceDiagram
     participant User
     participant InitCM as init_chat_model()
@@ -164,15 +162,15 @@ sequenceDiagram
     participant Partner as Partner Package
     participant Model as ChatOpenAI
 
-    User->>InitCM: init_chat_model(identifier="openai:gpt-4o",<br/>api_key=...)
+    User->>InitCM: init_chat_model identifier with api_key
     InitCM->>InitCM: Parse identifier to provider, model_name
     InitCM->>Registry: Lookup provider config
     Registry-->>InitCM: (module, class, factory_fn)
     InitCM->>Partner: Import langchain_openai
     Partner-->>InitCM: ChatOpenAI class
-    InitCM->>Model: factory_fn(ChatOpenAI, model="gpt-4o",<br/>api_key=...)
+    InitCM->>Model: factory_fn instantiate with model and api_key
     Model-->>InitCM: Initialized model instance
-    InitCM-->>User: BaseChatModel (ChatOpenAI)
+    InitCM-->>User: BaseChatModel instance
 ```
 
 The resolution process is lazy: `init_chat_model()` only imports the partner package when the user requests that provider, avoiding hard dependencies.
@@ -181,27 +179,26 @@ The resolution process is lazy: `init_chat_model()` only imports the partner pac
 
 When `create_agent()` is called, the factory builds a LangGraph state machine:
 
-<!-- openwiki: mermaid parse failed and this diagram was converted to a text fence so it does not break rendering. Fix the diagram source and restore the mermaid fence. Parser error: Heuristic: an unescaped angle bracket inside a label breaks rendering; rephrase the label. -->
-```text
+```mermaid
 sequenceDiagram
     participant User
     participant Factory as Agent Factory
-    participant StateGraph as LangGraph<br/>StateGraph
+    participant SG as LangGraph StateGraph
     participant Middleware as Middleware Stack
     participant Graph as Compiled Graph
 
-    User->>Factory: create_agent(model, tools, middleware=[...])
+    User->>Factory: create_agent with model, tools, middleware
     Factory->>Factory: Merge middleware state schemas
-    Factory->>StateGraph: new StateGraph(merged_AgentState)
-    Factory->>StateGraph: add_node("model", model_node)
-    Factory->>StateGraph: add_node("tools", tool_node)
-    Factory->>StateGraph: add_edge(START, entry_node)
+    Factory->>SG: new StateGraph with merged AgentState
+    Factory->>SG: add_node for model step
+    Factory->>SG: add_node for tools step
+    Factory->>SG: add_edge from START to entry
     
     Factory->>Middleware: Compose wrap_model_call layers
     Factory->>Middleware: Compose wrap_tool_call layers
     
-    Factory->>StateGraph: set_entry_point(entry_node)
-    Factory->>StateGraph: add_conditional_edges(after_model_node,<br/>route_to_tools_or_exit)
+    Factory->>SG: set_entry_point
+    Factory->>SG: add_conditional_edges for routing
     
     Factory->>Graph: compile()
     Graph-->>Factory: CompiledStateGraph
@@ -295,7 +292,7 @@ The core layer (langchain-core) is intentionally minimal and stable. Orchestrati
 
 ## Versioning and Release Policy
 
-- **langchain-core** (`v1.6.1`): Stable base abstractions. Major version bumps are rare and announced in advance. Deprecations carry multiple minor versions of notice. This is the "least-moving" part of the ecosystem.
+- **langchain-core** (`v1.6.2`): Stable base abstractions. Major version bumps are rare and announced in advance. Deprecations carry multiple minor versions of notice. This is the "least-moving" part of the ecosystem.
 
 - **langchain** (`v1.4.0`): Main user-facing package. Minor versions may add new agent patterns, middleware types, or orchestration improvements. Patch versions fix bugs. Requires specific langchain-core version (e.g., `>=1.6.0,<2.0.0`).
 

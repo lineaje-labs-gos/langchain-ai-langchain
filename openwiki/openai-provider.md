@@ -1,10 +1,11 @@
 ---
-type: "Reference"
-title: "Use async methods (ainvoke, astream)"
-openwiki_generated: true
+type: "Integration"
+title: "OpenAI Integration (ChatOpenAI)"
+description: "Production-ready chat model integration for OpenAI's Chat Completions and Responses APIs, covering model initialization, tool binding, structured output, vision support, and token counting."
+tags: ["OpenAI", "chat-models", "LLM", "tool-calling", "structured-output", "vision"]
 verified:
   - by: openwiki/0.5.0
-    at: 2026-09-03T15:18:34.589Z
+    at: 2026-09-07T08:30:39.263Z
 sources:
   - id: openwiki-source-1e66a9da38565f8901e651f4
     resource: repo://libs/partners/openai/langchain_openai/__init__.py
@@ -12,9 +13,8 @@ sources:
     resource: repo://libs/partners/openai/langchain_openai/chat_models/base.py
   - id: openwiki-source-74e5bef080f1af7da12371cf
     resource: repo://libs/partners/openai/langchain_openai/data/_profiles.py
-generated: { by: "openwiki/0.5.0", at: "2026-09-03T15:18:34.589Z" }
+generated: { by: "openwiki/0.5.0", at: "2026-09-07T08:30:39.263Z" }
 ---
-
 
 ## Overview
 
@@ -572,6 +572,52 @@ asyncio.run(stream_response())
 
 If a chunk doesn't arrive within the timeout, `StreamChunkTimeoutError` is raised. This is distinct from `httpx` read timeout—it measures silence between *parsed chunks*, not inter-byte silence.
 
+## Token Counting
+
+### Counting Message Tokens
+
+Use `get_num_tokens_from_messages()` to estimate token usage:
+
+```python
+from langchain_core.messages import HumanMessage, SystemMessage
+
+model = ChatOpenAI(model="gpt-4o")
+
+messages = [
+    SystemMessage(content="You are a helpful assistant."),
+    HumanMessage(content="What is 2 + 2?"),
+]
+
+# Count tokens in messages (excluding tool definitions)
+num_tokens = model.get_num_tokens_from_messages(messages)
+print(f"Message tokens: {num_tokens}")
+```
+
+**Token Counting Details:**
+
+- **Message overhead**: 3 tokens per message (for `gpt-4` family)
+- **Name overhead**: 1 token per message if `name` field is present
+- **Tool call content**: Approximated as function name + arguments (both encoded)
+- **Image tokens**: 
+  - `detail="low"`: 85 tokens per image
+  - `detail="high"`: ~170 + 255 per image tile (based on resolution)
+- **File inputs**: Not supported; warnings issued if included
+- **Tool schema tokens**: Not included in token count (see limitation below)
+
+**Limitation:**
+
+Token counting for tool **definitions** (schemas passed to `bind_tools()`) is not yet supported. OpenAI does not document the exact token cost for tool schemas, so `get_num_tokens_from_messages()` ignores them and issues a warning if `tools` are passed:
+
+```python
+messages = [HumanMessage("What's the weather?")]
+
+# This will warn and ignore tool schema tokens
+num_tokens = model.get_num_tokens_from_messages(messages, tools=[get_weather])
+# UserWarning: Counting tokens in tool schemas is not yet supported. Ignoring tools.
+```
+
+To estimate actual request cost with tools, manually add 1000–2000 tokens depending on tool complexity.
+
 ## Error Handling
 
 `ChatOpenAI` maps OpenAI SDK exceptions to LangChain's standardized error hierarchy:
@@ -693,6 +739,7 @@ def test_with_structured_output():
 
 ## Related Pages
 
-- `/openwiki/model-initialization.md`: Factory function `init_chat_model()` for provider-agnostic model selection
 - `/openwiki/chat-models.md`: Core `BaseChatModel` interface and lifecycle
-- `/openwiki/messages.md`: Message types and content blocks (text, images, tool calls)
+- `/openwiki/partner-pattern.md`: Partner package architecture and integration patterns
+- `/openwiki/structured-output.md`: Structured output across different providers
+- `/openwiki/tools.md`: Tool calling and function definitions
